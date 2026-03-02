@@ -2347,7 +2347,8 @@ toTopBtn.addEventListener('click', () => {
 // ================================
 
 // ⚠️ CAMBIA ESTA FECHA
-const EVENT_DATE = new Date("2026-04-25T17:00:00"); // YYYY-MM-DDTHH:MM
+const EVENT_DATE = new Date("2026-04-25T17:00:00"); // YYYY-MM-DDTHH:MM INICIO
+const EVENT_END = "2026-04-25T23:59:59"; // fin
 const fechaTexto = document.getElementById("fechaEvento");
 
 if (fechaTexto) {
@@ -2434,13 +2435,11 @@ function addToCalendar() {
   const lugar = "Salón de eventos Los Nogales";
 
   const startDate = EVENT_DATE;
-  const endDate = new Date(EVENT_DATE.getTime() + 3*60*60*1000);
+  const endDate = new Date(EVENT_END); 
 
   const isApple = /iPad|iPhone|iPod|Mac/.test(navigator.userAgent);
 
   if (isApple) {
-    
-    
     const formatICS = (date) =>
       date.toISOString().replace(/[-:]/g, "").split(".")[0] + "Z";
 
@@ -2467,7 +2466,6 @@ END:VCALENDAR`;
     document.body.removeChild(a);
 
   } else {
-    // ===== GOOGLE (Android / PC) =====
     const start = startDate.toISOString().replace(/[-:]/g, "").split(".")[0];
     const end = endDate.toISOString().replace(/[-:]/g, "").split(".")[0];
 
