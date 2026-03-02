@@ -2427,18 +2427,54 @@ function scrollToCountdown() {
 
 
 
-
 function addToCalendar() {
-  const start = EVENT_DATE.toISOString().replace(/[-:]/g, '').split('.')[0];
 
-  const url = `https://www.google.com/calendar/render?action=TEMPLATE
-    &text=XV+años+Sofía+Montes
-    &dates=${start}/${start}
-    &details=Mis+XV+años
-    &location=Evento`
-    .replace(/\s+/g, '');
+  const titulo = "XV años Michelle";
+  const detalles = "Acompáñame a celebrar mis XV";
+  const lugar = "Salón de eventos Los Nogales";
 
-  window.open(url, '_blank');
+  const startDate = EVENT_DATE;
+  const endDate = new Date(EVENT_DATE.getTime() + 3*60*60*1000);
+
+  const isApple = /iPad|iPhone|iPod|Mac/.test(navigator.userAgent);
+
+  if (isApple) {
+    
+    
+    const formatICS = (date) =>
+      date.toISOString().replace(/[-:]/g, "").split(".")[0] + "Z";
+
+    const icsContent =
+`BEGIN:VCALENDAR
+VERSION:2.0
+BEGIN:VEVENT
+DTSTART:${formatICS(startDate)}
+DTEND:${formatICS(endDate)}
+SUMMARY:${titulo}
+DESCRIPTION:${detalles}
+LOCATION:${lugar}
+END:VEVENT
+END:VCALENDAR`;
+
+    const blob = new Blob([icsContent], { type: "text/calendar" });
+    const url = URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "evento.ics";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+
+  } else {
+    // ===== GOOGLE (Android / PC) =====
+    const start = startDate.toISOString().replace(/[-:]/g, "").split(".")[0];
+    const end = endDate.toISOString().replace(/[-:]/g, "").split(".")[0];
+
+    const gURL = `https://www.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(titulo)}&dates=${start}/${end}&details=${encodeURIComponent(detalles)}&location=${encodeURIComponent(lugar)}`;
+
+    window.open(gURL, "_blank");
+  }
 }
 
   function actualizarOpciones() {
